@@ -7,13 +7,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 public class Main {
 
     public static void main(String[] args) {
-	// write your code here
+	    // write your code here
         int portNumber = 4444;
 
         try (
@@ -22,8 +20,6 @@ public class Main {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
         ) {
-
-
             String line = in.readLine();
             out.println(line);
         } catch (IOException e) {

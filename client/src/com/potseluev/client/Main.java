@@ -1,9 +1,11 @@
 package com.potseluev.client;
 
+import com.potseluev.common.Command;
+import com.potseluev.common.NotificationType;
+
 import java.io.*;
 import java.net.Socket;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.util.Date;
 import java.util.HashMap;
 
 public class Main {
@@ -11,55 +13,16 @@ public class Main {
         try (
             Socket socket = new Socket("localhost", 4444);
             PrintWriter printWriter = new PrintWriter(socket.getOutputStream(), true);
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         )
         {
-            HashMap<String, String> params = new HashMap<>();
-            params.put("email", "rustam2890@gmail.com");
-            params.put("message", "Hello World");
-
-            printWriter.println(Main.encodeCommand(params));
-            System.out.println(bufferedReader.readLine());
+            HashMap<String, String> extraParams = new HashMap<>();
+            extraParams.put("url", "yandex.ru");
+            Command command = new Command("Hello world", "1", new Date(), NotificationType.HTTP_REQUEST, extraParams);
+            printWriter.println(command.encode());
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static String encodeCommand(HashMap<String, String> params) {
-        String result = "";
-
-        boolean first = true;
-        for(String key : params.keySet()) {
-            try {
-                result += (!first ? "&" : "") + key + "=" + URLEncoder.encode(params.get(key), "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-            }
-
-            first = false;
-        }
-
-        return result;
-    }
-
-    public static HashMap<String, String> decodeCommand(String encoded) {
-        HashMap<String, String> params = new HashMap<>();
-
-        String[] parts = encoded.split("&");
-        for (String part: parts) {
-            String[] keyValue = part.split("=");
-            String key = keyValue[0];
-            String value = null;
-            try {
-                value = URLDecoder.decode(keyValue[1], "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-            }
-
-            params.put(key, value);
-        }
-
-        return params;
     }
 
 

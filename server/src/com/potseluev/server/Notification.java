@@ -6,7 +6,6 @@ import java.util.Date;
 
 public class Notification {
     private int id;
-
     private String message;
     private String externalId;
     private Date time;

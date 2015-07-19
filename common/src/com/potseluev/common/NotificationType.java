@@ -9,7 +9,7 @@ public enum NotificationType {
     }
 
     public static NotificationType valueOf(int id) {
-        for(NotificationType c : NotificationType.values()) {
+        for (NotificationType c : NotificationType.values()) {
             if (c.getId() == id) {
                 return c;
             }

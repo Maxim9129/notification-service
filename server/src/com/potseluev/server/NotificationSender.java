@@ -19,7 +19,7 @@ public class NotificationSender {
     private static final String SMTP_PORT = "587";
     private static final String LOGIN = "ivanov.ivandows@gmail.com";
     private static final String PASSWORD = "uvocsu76";
-    private static final String FROM = "a@a.com";
+    private static final String FROM = "ivanov.ivandows@gmail.com";
 
     public void sendNotification(Notification notification) throws SenderException {
         switch (notification.getNotificationType()) {
@@ -39,11 +39,11 @@ public class NotificationSender {
         properties.setProperty("mail.smtp.port", SMTP_PORT);
         properties.setProperty("mail.smtp.starttls.enable", "true");
         return Session.getInstance(properties,
-                    new Authenticator() {
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            return new PasswordAuthentication(LOGIN, PASSWORD);
-                        }
-                    });
+                new Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(LOGIN, PASSWORD);
+                    }
+                });
     }
 
     public void sendEmail(String to, String message) throws SenderException {
@@ -52,23 +52,11 @@ public class NotificationSender {
         session = getSession();
 
         try {
-            // Create a default MimeMessage object.
             MimeMessage mimeMessage = new MimeMessage(session);
-
-            // Set From: header field of the header.
             mimeMessage.setFrom(new InternetAddress(FROM));
-
-            // Set To: header field of the header.
-            mimeMessage.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress(to));
-
-            // Set Subject: header field
+            mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
             mimeMessage.setSubject(SUBJECT);
-
-            // Now set the actual message
             mimeMessage.setText(message);
-
-            // Send message
             Transport.send(mimeMessage);
         } catch (MessagingException mex) {
             throw new SenderException(mex.getMessage());

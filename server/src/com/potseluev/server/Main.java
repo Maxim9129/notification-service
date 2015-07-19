@@ -1,7 +1,7 @@
 package com.potseluev.server;
 
 
-import com.potseluev.common.Command;
+import com.potseluev.common.ScheduleNotificationCommand;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     private static int PORT = 4444;
-    private static  long THREAD_SLEEP_MILISECONDS = 10000;
+    private static long THREAD_SLEEP_MILLISECONDS = 10000;
 
     public static void main(String[] args) throws ClassNotFoundException {
 
@@ -36,7 +36,7 @@ public class Main {
                     }
 
                     try {
-                        TimeUnit.MILLISECONDS.sleep(THREAD_SLEEP_MILISECONDS);
+                        TimeUnit.MILLISECONDS.sleep(THREAD_SLEEP_MILLISECONDS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -52,19 +52,20 @@ public class Main {
                         BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 ) {
                     String line = in.readLine();
-                    Command command = Command.decode(line);
+                    ScheduleNotificationCommand command = ScheduleNotificationCommand.decode(line);
                     Notification notification = new Notification();
                     notification.setMessage(command.getMessage());
                     notification.setExternalId(command.getExternalId());
                     notification.setNotificationType(command.getNotificationType());
                     notification.setTime(command.getTime());
-                    if (command.getExtraParams().containsKey("email"))
-                        notification.setEmail(command.getExtraParams().get("email"));
-                    if (command.getExtraParams().containsKey("url"))
-                        notification.setUrl(command.getExtraParams().get("url"));
+                    if (command.getExtraParams().containsKey(ScheduleNotificationCommand.PROPERTY_EMAIL)) {
+                        notification.setEmail(command.getExtraParams().get(ScheduleNotificationCommand.PROPERTY_EMAIL));
+                    }
+                    if (command.getExtraParams().containsKey(ScheduleNotificationCommand.PROPERTY_URL)) {
+                        notification.setUrl(command.getExtraParams().get(ScheduleNotificationCommand.PROPERTY_URL));
+                    }
 
                     database.createNotification(notification);
-                    System.out.println(command.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

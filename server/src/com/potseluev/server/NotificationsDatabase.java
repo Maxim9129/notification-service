@@ -65,7 +65,7 @@ public class NotificationsDatabase {
     }
 
     public List<Notification> getPendingNotifications() {
-        String sqlSelect = "SELECT * FROM NOTIFICATION WHERE DATE < DATE()";
+        String sqlSelect = "SELECT * FROM NOTIFICATION WHERE DATE < " + System.currentTimeMillis();
         ArrayList<Notification> notifications = new ArrayList<>();
         try (
                 Connection c = getConnection();

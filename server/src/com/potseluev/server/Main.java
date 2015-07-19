@@ -18,8 +18,8 @@ public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException {
 
-        NotificationsDatabase database = new NotificationsDatabase();
-        NotificationSender notificationSender = new NotificationSender();
+        final NotificationsDatabase database = new NotificationsDatabase();
+        final NotificationSender notificationSender = new NotificationSender();
 
         Thread thread = new Thread(new Runnable() {
             @Override
